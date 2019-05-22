@@ -6,9 +6,8 @@
     fxLayoutGap="10px" 
     fxLayoutGap.xs="0">
 
-    <div fxFlex="40" *ngIf='dish'>
-        <div fxFlex>
-          <mat-card>
+    <div fxFlex="40">
+          <mat-card *ngIf='dish'>
             <mat-card-header>
               <mat-card-title>
                 <h3>{{dish.name | uppercase}}</h3>
@@ -23,25 +22,20 @@
               <button mat-button> SHARE </button>
             </mat-card-actions>
           </mat-card>
-        </div>      
-    </div>
+  </div>
 
-    <div fxFlex="40" *ngIf='dish'>
-      <div fxFlex>
-        <div>
+    <div fxFlex="40" >
+      <mat-list *ngIf='dish'>
           <h3>Comments</h3>
-        </div>
-        <mat-list *ngFor = 'let review of dish.comments' >
-          <mat-list-item >
-            <span matLine> {{review.comment}} </span >
-              <mat-divider></mat-divider>
-            <span matLine> {{review.rating}} Starts </span>
-            <span matLine>
-              -- {{review.author}}  {{review.date | date:'mediumDate'}}<br/>
-            </span>
-          </mat-list-item>
-        </mat-list>
-      </div>      
+        <mat-list-item *ngFor = 'let review of dish.comments' >
+          <span matLine> {{review.comment}} </span >
+            <mat-divider></mat-divider>
+          <span matLine> {{review.rating}} Starts </span>
+          <span matLine>
+            -- {{review.author}}  {{review.date | date:'mediumDate'}}<br/>
+          </span>
+        </mat-list-item>
+      </mat-list>
     </div>
 </div>
 
