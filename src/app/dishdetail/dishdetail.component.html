@@ -33,17 +33,55 @@
   </div>
 
     <div fxFlex="40" *ngIf='dish'>
-      <mat-list >
-          <h3>Comments</h3>
-        <mat-list-item *ngFor = 'let review of dish.comments' >
-          <span matLine> {{review.comment}} </span >
-            <mat-divider></mat-divider>
-          <span matLine> {{review.rating}} Starts </span>
-          <span matLine>
-            -- {{review.author}}  {{review.date | date:'mediumDate'}}<br/>
-          </span>
-        </mat-list-item>
-      </mat-list>
+      <div>
+        <mat-list >
+            <h3>Comments</h3>
+          <mat-list-item *ngFor = 'let review of dish.comments' >
+            <span matLine> {{review.comment}} </span >
+              <mat-divider></mat-divider>
+            <span matLine> {{review.rating}} Starts </span>
+            <span matLine>
+              -- {{review.author}}  {{review.date | date:'mediumDate'}}<br/>
+            </span>
+          </mat-list-item>
+          <mat-list-item *ngIf="!commentForm.invalid">
+              <span matLine> {{commentForm.value.comment}} </span >
+                <mat-divider></mat-divider>
+              <span matLine> {{commentForm.value.rating}} Starts </span>
+              <span matLine>
+                -- {{commentForm.value.author}} <br/>
+              </span>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div>
+        <form [formGroup]="commentForm" #cform="ngForm" (ngSubmit)="onSubmit()">
+          <p>
+            <mat-form-field class="ful-width">
+              <input matInput placeholder="Name" type="text" formControlName="author" required>
+              <mat-error *ngIf="formErrors.author">
+                {{ formErrors.author }}
+              </mat-error>
+            </mat-form-field>
+          </p>
+          <p> 
+            <mat-slider thumbLabel tickInterval="1" min="1" max="5" formControlName="rating"></mat-slider>
+              <mat-error *ngIf="formErrors.rating">
+                {{ formErrors.rating }}
+              </mat-error>
+          </p>
+          <p>
+            <mat-form-field class="ful-width">
+              <textarea matInput placeholder="Your Comment" formControlName="comment" rows=12 required></textarea>
+              <mat-error *ngIf="formErrors.comment">
+                {{ formErrors.comment }}
+              </mat-error>
+            </mat-form-field>
+          </p>
+          <button [disabled]="commentForm.invalid" mat-button class="background-primary text-floral-white" >Submit</button>
+        </form>
+      </div>
+
     </div>
     <div [hidden]="dish" fxFlex>
       <mat-spinner></mat-spinner>
