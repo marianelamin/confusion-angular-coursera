@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { FormBuilder , FormGroup, Validators } from '@angular/forms';
 import { Params, ActivatedRoute } from '@angular/router';
 
@@ -19,6 +19,7 @@ export class DishdetailComponent implements OnInit {
 
   // @Input() no longer need it, since it wont be received as input
   dish: Dish;
+  errMess:string;
   dishIds: string[];
   prev: string;
   next: string;
@@ -44,7 +45,7 @@ export class DishdetailComponent implements OnInit {
   };
 
   constructor( private fb:FormBuilder, private dishService: DishService, private location: Location,
-    private route: ActivatedRoute) { 
+    private route: ActivatedRoute, @Inject('BaseURL') private BaseURL) { 
       this.createCommentForm();
     }
   
@@ -52,10 +53,12 @@ export class DishdetailComponent implements OnInit {
     this.dishService.getDishIds()
     .subscribe((dishIds) => this.dishIds = dishIds);
     this.route.params.pipe(switchMap((params:Params) => this.dishService.getDish(params['id'])))
-    .subscribe((dish) => {
-      this.dish = dish;
-      this.setPrevNext(dish.id);
-    });
+    .subscribe(
+      (dish) => {
+                  this.dish = dish;
+                  this.setPrevNext(dish.id);
+                },
+      (errmess) => this.errMess = <any>errmess );
   }
 
   // **************************** ALL ABOUT PREV AND NEXT ITEM ****************************
